@@ -83,31 +83,22 @@ const TimerContainer = class {
         const lightbulb_service = this.Lightbulb.getService(Service.Lightbulb)
         lightbulb_service.getCharacteristic(Characteristic.Brightness)
             .on('get', (callback) => {
-                console.log('In get handler');
+                console.log(`In get handler: ${this.lightbulb_brightness}`);
                 callback(null, this.lightbulb_brightness);
             })
             .on('set', (value, callback) => {
-                console.log('In set handler', value);
+                console.log('In set handler');
                 this.lightbulb_brightness = value;
 
-                if (this.selfcall) {
-                    this.selfcall = false;
-                    // Trigger a refresh of the brightness value to the Home app
-                    console.log(`Refreshing brightness: ${this.lightbulb_brightness}`);
-                    lightbulb_service.getCharacteristic(Characteristic.Brightness)
-                                     .getValue();
-                } else {
-
-                    if (value) {
-                        this.timer.start()
-                            .then((val) => {
-                                if (val) {
-                                    lightbulb_service.setCharacteristic(Characteristic.On, 0); // Turn off the lightbulb
-                                }
-                            });
-                    }
-
+                if (value) {
+                    this.timer.start()
+                        .then((val) => {
+                            if (val) {
+                                lightbulb_service.setCharacteristic(Characteristic.On, 0); // Turn off the lightbulb
+                            }
+                        });
                 }
+
                 callback(null);
             });
 
@@ -138,8 +129,11 @@ const Timer = class {
         for (let i = 0; i < brightness; i++) {
             await wait(step_length);
             
-            this.parent.selfcall = true;
-            lightbulb_service.setCharacteristic(Characteristic.Brightness, this.parent.lightbulb_brightness - 1);
+            this.parent.lightbulb_brightness -= 1;
+
+            // Trigger a refresh of the brightness value to the Home app
+            lightbulb_service.getCharacteristic(Characteristic.Brightness)
+                             .getValue();
         }
 
         if (this.startTime === t) {
