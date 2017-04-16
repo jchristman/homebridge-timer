@@ -4,6 +4,9 @@
   "description": "A way of adding timers into homebridge if built-in functionality doesn't exist",
   "license": "MIT",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "babel -w src --out-dir lib"
   },
