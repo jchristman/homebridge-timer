@@ -1,6 +1,6 @@
 {
   "name": "homebridge-timer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A way of adding timers into homebridge if built-in functionality doesn't exist",
   "license": "MIT",
   "main": "lib/index.js",
