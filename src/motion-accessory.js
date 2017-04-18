@@ -19,7 +19,7 @@ class MotionSensor {
         } else {
             this.active = {
                 start: '00:00',
-                end: '24:00'
+                end: '23:59'
             };
         }
 
@@ -63,8 +63,11 @@ class MotionSensor {
     }
 
     async activate() {
+        if (!this.check_time()) {
+            this.log(`${this.name} not activating between ${this.active.end.format('HH:mm')}-${this.active.start.format('HH:mm')}`);
+            return;
+        }
         this.log(`Activated ${this.name}`);
-        check_time();
         this.detectedChar.setValue(true);
         await wait(5000); // Wait 10 seconds
         this.deactivate();
@@ -76,21 +79,31 @@ class MotionSensor {
     }
 
     check_time() {
-        const cur = moment();
-        const hour = cur.hour();
-        const minute = cur.minute();
-        
+        const cur = moment(),
+              cur_hour = cur.hour(),
+              cur_minute = cur.minute(),
+              start_hour = this.active.start.hour(),
+              start_minute = this.active.start.minute(),
+              end_hour = this.active.end.hour(),
+              end_minute = this.active.end.minute();
+
         if (this.active_cross_days) {
-            if (this.active.start.hour() <= hour || hour <= this.active.end.hour()) {
-                if (this.active.start.minute() <= minute || minute <= this.active.end.minute()) {
-                    return true;
+            if (start_hour <= cur_hour || cur_hour <= end_hour) {
+                if ((start_hour === end_hour && start_hour === cur_hour && end_minute < cur_minute && cur_minute < start_minute) ||
+                    (start_hour === cur_hour && cur_minute < start_minute) || 
+                    (end_hour === cur_hour && end_minute < cur_minute)) {
+                    return false;
                 }
+                return true;
             }
         } else {
-            if (this.active.start.hour() <= hour && hour <= this.active.end.hour()) {
-                if (this.active.start.minute() <= minute && minute <= this.active.end.minute()) {
-                    return true;
+            if (start_hour <= cur_hour && cur_hour <= end_hour) {
+                if ((start_hour === end_hour && start_hour === cur_hour && end_minute < cur_minute && cur_minute < start_minute) ||
+                    (start_hour === cur_hour && cur_minute < start_minute) || 
+                    (end_hour === cur_hour && end_minute < cur_minute)) {
+                    return false;
                 }
+                return true;
             }
         }
 
