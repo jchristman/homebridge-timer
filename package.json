@@ -1,6 +1,6 @@
 {
   "name": "homebridge-timer",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A way of adding timers into homebridge if built-in functionality doesn't exist",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,13 +25,13 @@
     "babel-cli": "^6.24.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
-    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-stage-0": "^6.24.1"
   },
   "dependencies": {
     "asyncawait": "^1.0.6",
     "lodash": "^4.17.4",
-    "moment": "^2.17.1"
+    "moment": "^2.17.1",
+    "babel-polyfill": "^6.23.0"
   }
 }
