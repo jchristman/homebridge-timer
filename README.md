@@ -32,6 +32,7 @@ Your config for this should look like:
                 {
                     "name": "Sprinkler Zone 1",
                     "seconds": 600
+                }
             ]
         }
     ]
