@@ -1,3 +1,6 @@
+# No longer needed
+This package is no longer needed. Its functionality is built in to iOS11.
+
 # homebridge-timer
 A timer component that exposes two motion sensors and a lightbulb that can start the timer.
 
